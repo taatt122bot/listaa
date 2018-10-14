@@ -1295,6 +1295,46 @@ bot("editmessagetext",[
 ]])
 ]);
 }
+#ghh
+if($data == "ghh"){
+file_put_contents("data/yeslist.txt", "");
+file_put_contents("data/listaa.php", '<?php'."\n".'$getlistm = json_encode(['."\n".'"inline_keyboard"=>['."\n");
+file_put_contents("data/nolist.txt", "");
+bot('editmessagetext',[
+'chat_id'=>$chat_id, 
+'text'=>"📎📎 جاري تحويل للسته جهتين  .",
+"message_id"=>$message_id,
+]);
+for($i=0;$i<count($getids);$i++){
+$ok = json_decode(file_get_contents("http://api.telegram.org/bot$token/getChatAdministrators?chat_id=$getids[$i]"))->ok;
+if($ok == 1){
+$json1 = json_decode(file_get_contents("http://api.telegram.org/bot$token/getChat?chat_id=$getids[$i]"))->result;
+$user1 = $json1->username; 
+$userl = "@".$user1." - ";
+$name1 = $json1->title; 
+ $name1=str_replace("'","",$name1);
+$name1=str_replace('"','',$name1);
+file_put_contents("data/yeslist.txt", "$userl", FILE_APPEND);
+file_put_contents("data/listaa.php", "\n".'[["text"=>"'.$EMLST.$name1.$ESLST.'", "url"=>"https://t.me/'.$user1.'"],', FILE_APPEND);
+file_put_contents("data/listaa.php", "\n".'["text"=>"'.$EMLST.$name1.$ESLST.'", "url"=>"https://t.me/'.$user1.'"]],', FILE_APPEND);
+}
+if($ok != 1){
+$json2 = json_decode(file_get_contents("http://api.telegram.org/bot$token/getChat?chat_id=$getids[$i]"))->result;
+$user2 = $json2->username; 
+$useri = "@".$user2." - ";
+file_put_contents("data/nolist.txt", "$useri", FILE_APPEND);
+}
+}
+$yes = file_get_contents("data/yeslist.txt");
+$no = file_get_contents("data/nolist.txt");
+file_put_contents("data/listaa.php", "\n[['text'=>'تابع جديدنا', 'url'=>'https://t.me/taattbot']]\n]]);", FILE_APPEND);
+bot('editmessagetext',[
+'chat_id'=>$chat_id, 
+'text'=>"ℓ🌀- القنوات المشاركة\n➖➖\n".$yes."\n➖➖\nℓ⛔️- القنوات المخالفة\n➖➖\n".$no."\n➖➖\nℓ⚙️- نوع لستة شفاف",
+"message_id"=>$message_id,
+'reply_markup'=>$back
+]);
+}
 # res
 if($data == "res"){
 file_put_contents("data/yeslist.txt", "");
